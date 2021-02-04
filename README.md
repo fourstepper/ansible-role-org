@@ -1,6 +1,8 @@
 ansible-role-org
 =========
 
+[![builds.sr.ht status](https://builds.sr.ht/~fourstepper/ansible-role-org.svg)](https://builds.sr.ht/~fourstepper/ansible-role-org?)
+
 This role installs and configures khal, khard, todoman and vdirsyncer
 
 Requirements
@@ -24,8 +26,3 @@ Example Playbook
     - hosts: localhost
       roles:
          - role: ansible-role-org
-
-License
--------
-
-BSD
