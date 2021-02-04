@@ -1,0 +1,87 @@
+---
+# tasks file for ansible-role-org
+- name: Make sure python3 is installed
+  package:
+    name: python3
+    state: present
+  become: true
+
+- name: Install the packages (from pip3)
+  pip:
+    name: "{{ org_python_packages }}"
+    state: present
+  become: true
+
+- name: Copy the config files for khal (from the global folder)
+  copy:
+    src: "../../../config_files/khal"
+    dest: "$HOME/.config/"
+  ignore_errors: true
+  register: global_config
+
+- name: Copy the config files for khal locally
+  copy:
+    src: files/khal
+    dest: "$HOME/.config/"
+  when: global_config.failed
+
+- name: Copy the config files for khard (from the global folder)
+  copy:
+    src: "../../../config_files/khard"
+    dest: "$HOME/.config/"
+  ignore_errors: true
+  register: global_config
+
+- name: Copy the config files for khard locally
+  copy:
+    src: files/khard
+    dest: "$HOME/.config/"
+  when: global_config.failed
+
+- name: Copy the config files for todoman (from the global folder)
+  copy:
+    src: "../../../config_files/todoman"
+    dest: "$HOME/.config/"
+  ignore_errors: true
+  register: global_config
+
+- name: Copy the config files for todoman locally
+  copy:
+    src: files/todoman
+    dest: "$HOME/.config/"
+  when: global_config.failed
+
+- name: Copy the config files for vdirsyncer (from the global folder)
+  copy:
+    src: "../../../config_files/vdirsyncer"
+    dest: "$HOME/.config/"
+  ignore_errors: true
+  register: global_config
+
+- name: Copy the config files for vdirsyncer locally
+  copy:
+    src: files/vdirsyncer
+    dest: "$HOME/.config/"
+  when: global_config.failed
+
+- name: Make sure cron is installed
+  package:
+    name: cron
+    state: present
+  become: true
+  when: ansible_facts['distribution'] == "Debian"
+
+- name: Make sure cron is installed
+  package:
+    name: cronie
+    state: present
+  become: true
+  when: ansible_facts['os_family'] == "RedHat"
+
+- name: Set up cron for vdirsyncer
+  cron:
+    name: run vdirsyncer
+    job: vdirsyncer sync
+    minute: "*/10"
+    hour: "*"
+    month: "*"

@@ -1,0 +1,7 @@
+---
+# defaults file for ansible-role-org
+org_python_packages:
+  - vdirsyncer
+  - khal
+  - khard
+  - todoman
